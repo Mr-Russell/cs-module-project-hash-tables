@@ -24,6 +24,7 @@ class HashTable:
         # Your code here
         self.capacity = capacity
         self.table = [None] * capacity
+        self.entries = 0
 
 
     def get_num_slots(self):
@@ -47,12 +48,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        filled_slots = self.capacity
-        for i in self.table:
-            if i == None:
-                filled_slots -= 1
-
-        return (filled_slots / self.capacity)
+        return (self.entries / self.capacity)
 
 
     def fnv1(self, key):
@@ -97,7 +93,25 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
 
-        self.table[index] = HashTableEntry(key, value)
+        if self.table[index] == None:
+            self.table[index] = HashTableEntry(key, value)
+            self.entries += 1
+
+        else:
+            previous = None
+            current = self.table[index]
+            while current != None:
+                if current.key == key:
+                    current.value = value
+                    return
+                previous = current
+                current = current.next
+            previous.next = HashTableEntry(key, value)
+            self.entries += 1
+        
+        if self.get_load_factor() > 0.7:
+            new_capacity = (self.capacity * 2)
+            self.resize(new_capacity)
 
 
     def delete(self, key):
@@ -111,7 +125,32 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
 
-        self.table[index] = None
+        if self.table[index] == None:
+            return "WARNING: Key Not Found"
+
+        elif self.table[index].key == key:
+            self.table[index] = self.table[index].next
+        
+        else:
+            previous = self.table[index]
+            current = self.table[index].next
+            while current != None:
+                if current.key == key:
+                    previous.next = current.next
+                    self.entries -= 1
+                    return
+                previous = current
+                current = current.next
+            return "WARNING: Key Not Found"
+
+        if self.get_load_factor() < 0.2:
+            new_capacity = (self.capacity / 2)
+
+            if new_capacity < 8:
+                new_capacity = 8
+
+            self.resize(new_capacity)
+
 
 
     def get(self, key):
@@ -125,10 +164,12 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
 
-        if self.table[index] == None:
-            return None
-        else:
-            return self.table[index].value
+        current = self.table[index]
+        while current != None:
+            if current.key == key:
+                return current.value
+            current = current.next
+        return None
 
 
     def resize(self, new_capacity):
@@ -139,6 +180,19 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        old_hash = self.table.copy()
+        self.capacity = new_capacity
+        self.table = [None] * new_capacity
+        self.entries = 0
+
+        for item in old_hash:
+            if item != None:
+                current = item
+                while current != None:
+                    self.put(current.key, current.value)
+                    current = current.next
+
+
 
 
 
