@@ -36,12 +36,12 @@ def sumdiff(l):
             if plus not in addition:
                 addition[plus] = []
             
-            addition[plus].append((f'f({a}) + f({b})', f'{f_of_x[a]} + {f_of_x[a]}')) 
+            addition[plus].append((f'f({a}) + f({b})', f'{f_of_x[a]} + {f_of_x[b]}')) 
             
             if minus not in subtraction:
                 subtraction[minus] = []
 
-            subtraction[minus].append((f'f({a}) - f({b})', f'{f_of_x[a]} - {f_of_x[a]}'))
+            subtraction[minus].append((f'f({a}) - f({b})', f'{f_of_x[a]} - {f_of_x[b]}'))
 
 
     for c in addition:
