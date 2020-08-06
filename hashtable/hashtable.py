@@ -48,7 +48,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        return (self.entries / self.capacity)
+        return self.entries / self.capacity
 
 
     def fnv1(self, key):
@@ -130,6 +130,7 @@ class HashTable:
 
         elif self.table[index].key == key:
             self.table[index] = self.table[index].next
+            self.entries -= 1
         
         else:
             previous = self.table[index]
@@ -143,11 +144,11 @@ class HashTable:
                 current = current.next
             return "WARNING: Key Not Found"
 
-        if self.get_load_factor() < 0.2:
-            new_capacity = (self.capacity / 2)
+        if self.get_load_factor() < 0.2 and self.capacity > 8:
+            new_capacity = (self.capacity // 2)
 
-            if new_capacity < 8:
-                new_capacity = 8
+            if new_capacity < MIN_CAPACITY:
+                new_capacity = MIN_CAPACITY
 
             self.resize(new_capacity)
 

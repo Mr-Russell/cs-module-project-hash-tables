@@ -1,5 +1,22 @@
 def word_count(s):
     # Your code here
+    count = {}
+    punct = '":;,.-+=/\|[]{}()*^&'
+    words = s.lower().split()
+    
+
+    for i in words:
+        i = i.strip(punct)
+        if i == '':
+            continue
+
+        if i not in count:
+            count[i] = 0
+        
+        count[i] += 1
+    
+    return count
+
 
 
 

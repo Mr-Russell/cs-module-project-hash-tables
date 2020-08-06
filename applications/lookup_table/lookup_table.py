@@ -1,4 +1,8 @@
 # Your code here
+import math
+import random
+
+lookup = {}
 
 
 def slowfun_too_slow(x, y):
@@ -15,6 +19,11 @@ def slowfun(x, y):
     output, but completes quickly instead of taking ages to run.
     """
     # Your code here
+    if (x, y) not in lookup:
+        lookup[(x, y)] = slowfun_too_slow(x, y)
+    
+    return lookup[(x, y)]
+
 
 
 
@@ -24,3 +33,9 @@ for i in range(50000):
     x = random.randrange(2, 14)
     y = random.randrange(3, 6)
     print(f'{i}: {x},{y}: {slowfun(x, y)}')
+
+print()
+print()
+
+for item in lookup:
+    print(f"{item}: {lookup[item]}")
